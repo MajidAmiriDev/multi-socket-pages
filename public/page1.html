@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 1</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Page 1</h1>
+  <button id="sendMessage">Send Message</button>
+  <button id="sendGlobalMessage">Send Global Message</button>
+
+  <script>
+    // سوکت مخصوص page1
+    const socket = io('/page1');
+
+    // سوکت گلوبال
+    const globalSocket = io('/global');
+
+    document.getElementById('sendMessage').addEventListener('click', () => {
+      socket.emit('message_from_page', { message: 'Hello from Page 1' });
+    });
+
+    document.getElementById('sendGlobalMessage').addEventListener('click', () => {
+      globalSocket.emit('global_message', { message: 'Hello from Page 1 (Global)' });
+    });
+
+    // دریافت پیام‌های گلوبال
+    globalSocket.on('global_broadcast', (data) => {
+      console.log(`Global message received on Page 1: ${data.message}`);
+    });
+  </script>
+</body>
+</html>
